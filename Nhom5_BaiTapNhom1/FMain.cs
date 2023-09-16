@@ -52,20 +52,53 @@ namespace Nhom5_BaiTapNhom1
                 {
                     // Lấy sinh viên cần xóa
                     SinhVien tmp = Program.listSinhVien.Find(sv => sv.Mssv == item.Text);
-
                     // Thêm sinh viên đó vào danh sách tạm thời
                     listSinhVienToRemove.Add(tmp);
                 }
             }
-
             // Xóa các sinh viên khỏi danh sách gốc
             foreach (SinhVien sv in listSinhVienToRemove)
             {
                 Program.listSinhVien.Remove(sv);
             }
-
             // Load lại listview
             LoadListView(Program.listSinhVien);
+        }
+
+        private bool HaveOnlyOneChecked()
+        {
+            int count = 0;
+            foreach (ListViewItem item in ltvShow.Items) 
+            { 
+                if (item.Checked)
+                {
+                    count++;
+                    if (count >= 2) return false;
+                }
+            }
+            if (count == 1)
+                return true;
+            else
+                return false;
+        }
+
+        public ListViewItem FindFirstChecked()
+        {
+            foreach (ListViewItem item in ltvShow.Items) { if (item.Checked) return item; } return null;
+        }
+
+        private void btnSua_Click(object sender, EventArgs e)
+        {
+            Sua sua = new Sua();
+            if (HaveOnlyOneChecked())
+            {
+                if (sua.ShowDialog() == DialogResult.Cancel)
+                {
+                    LoadListView(Program.listSinhVien);
+                }
+            }
+            else
+                MessageBox.Show("Chọn 1 và chỉ 1 đối tượng để thực hiện chức năng này !!!");
         }
     }
 }
